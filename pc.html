@@ -1,0 +1,80 @@
+<div class="player_main">
+    <iframe src="http://www.maoyun.tv/mdparse/index.php?id={dede:field.body/}" frameborder="0" border="0" marginwidth="0" marginheight="0" scrolling="no" id="player_iframe" allowfullscreen="true"></iframe>
+</div>
+
+<style>
+.player_switch p{ float: left; margin-right: 8px; color: red;}
+.player_switch button{ border: 1px solid #ccc; background:  white; border-radius: 8px; width: 74px; float: left; margin-right: 8px;}
+.player_switch .on{background: #f68; border: 1px solid #f68; color: #fff;}
+</style>
+
+<script>
+var line = ["http://www.maoyun.tv/mdparse/index.php?id=", "http://api.wlzhan.com/sudu/?url=", "http://api.47ks.com/webcloud/?v=", " ", "http://jx.yylep.com/?url=", "https://jx.maoyun.tv/d/?id="];
+//libraries of source video
+var sourceLib = 
+[
+    [ ],//line1
+    [ ],//line2
+    [ ],//line3
+    ["www.yylep.com", "moe.oansov.cn","110.80.136.9:2100", "acvideo.fun:2100"],//line4
+    ["www.iqiyi.com" ],//line5
+    ["vd3.bdstatic.com" ],//line6
+]
+
+var buttons = '<div class="player_switch"><p>无法播放？试试切换线路</p><div>'
+for(var i = 0; i < line.length; i++)
+{
+	iPlus = i + 1;
+	var temp = '<button id="' + i + '" onclick="playerSwitch(this.id)">线路' + iPlus + '</button>';
+	buttons += temp;
+}
+
+playerSwitch = function(lineIndex)
+{
+    $(".player_main iframe").attr("src",line[lineIndex] + "{dede:field.body/}");
+    $(".player_switch #" + lineIndex + "" ).addClass('on').attr("onclick","");
+    $(".player_switch #" + lineIndex + "" ).siblings().removeClass('on').attr("onclick","playerSwitch(this.id)");
+}
+
+//matching line
+var sourceUrl = "{dede:field.body/}";
+var sourceUrlHost = new Array();
+sourceUrlHost = sourceUrl.split("/")[2];
+function matching(){
+    for (var i = 0; i < sourceLib.length; i++)
+    {
+        for(var j = 0; j < sourceLib[i].length; j++)
+        {
+            if(sourceUrlHost == sourceLib[i][j])
+            {
+                return i;
+            }
+            
+            
+        }
+    }
+    return 99;
+}
+
+
+var lineIdx = matching();
+
+if(lineIdx != 99)
+{
+    playerSwitch(lineIdx);
+    $(window).load(function () {
+        $('.player_sx').after(buttons + '</div><div style="clear:both;"></div></div>');
+        $(".player_switch #" + lineIdx ).addClass('on').attr("onclick","");
+    });
+}
+else
+{
+    $(window).load(function () {
+        $('.player_sx').after(buttons + '</div><div style="clear:both;"></div></div>');
+        $(".player_switch #0" ).addClass('on').attr("onclick","");
+    });
+}
+    
+
+
+</script>

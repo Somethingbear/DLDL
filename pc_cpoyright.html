@@ -1,0 +1,65 @@
+<div class="player_main">
+    <iframe src="" frameborder="0" border="0" marginwidth="0" marginheight="0" scrolling="no" id="player_iframe" allowfullscreen="true" style=" display: none;"></iframe>
+    <div class="back"><div class="button"><a href="{dede:field.shipin1/}" target="_blank">点击跳转</a></div></div>
+</div>
+
+<style>
+.player_switch p { float: left; margin-right: 8px; color: red;}
+.player_switch button { border: 1px solid #ccc; background:  white; border-radius: 8px; width: 74px; float: left; margin-right: 8px;}
+.player_switch .on {background: #f68; border: 1px solid #f68; color: #fff;}
+.player_main .back { height: 100%; width: 100%; background: url(/uploads/allimg/180306/1_1738104101.jpg) no-repeat bottom center; background-size: cover; position: relative;}
+.player_main .back .button { width: max-content; height: 48px; border-radius: 10px; background: #06c; color: #fff; font-size: 24px; text-align: center; margin: 0; -moz-transition: all 100ms linear; -o-transition: all 100ms linear; -ms-transition: all 100ms linear; transition: all 100ms linear; position: relative; top: 19em; left: 30.5em; padding: 0.2em 1em;}
+.player_main .back .button:hover { background: #f60; cursor: pointer;}
+.player_main .back .button a { color: #fff; text-decoration: none; line-height: 48px;}
+</style>
+
+<script>
+var line = ["https://jx.maoyun.tv/d/?id=", "http://api.wlzhan.com/sudu/?url=", "http://api.47ks.com/webcloud/?v=", " ", "http://jx.yylep.com/?url=","http://www.maoyun.tv/mdparse/index.php?id="];
+//libraries of source video
+var sourceLib = 
+[
+    [ ],//line1
+    [ ],//line2
+    [ ],//line3
+    ["www.yylep.com", "moe.oansov.cn","110.80.136.9:2100", "acvideo.fun:2100"],//line4
+    ["www.iqiyi.com" ],//line5
+    ["vd3.bdstatic.com" ],//line6
+]
+
+var sourceSite = "{dede:field name='videosource' runphp='yes'}
+    if (@me == 'iqiyi') @me='爱奇艺';
+	if (@me == 'bilibili') @me='哔哩哔哩';
+	if (@me == 'youku') @me='优酷';
+	if (@me == 'pptv') @me='PPTV';
+	if (@me == 'qq') @me='腾讯';
+	if (@me == 'acfan') @me='ACFAN';
+	if (@me == 'letv') @me='乐视';
+	if (@me == 'yun') @me='乐视云';
+	if (@me == 'sohu') @me='搜狐';
+	if (@me == 'sina') @me='新浪';
+	{/dede:field}";
+var buttons = '<div class="player_switch"><p>无法播放？试试切换线路</p><div><button id="sourceSite" class="on" onclick="sourceSiteSwitch()">'+ sourceSite +'</button>'
+for(var i = 0; i < line.length; i++)
+{
+	iPlus = i + 1;
+	var temp = '<button id="' + i + '" onclick="playerSwitch(this.id)">线路' + iPlus + '</button>';
+	buttons += temp;
+}
+$(window).load(function () {
+    $('.player_sx').after(buttons + '</div><div style="clear:both;"></div></div>');
+});
+playerSwitch = function(lineIndex)
+{
+    $(".player_main iframe").attr("src",line[lineIndex] + "{dede:field.body/}").show();
+    $(".player_main .back").hide();
+    $(".player_switch #" + lineIndex).addClass('on').attr("onclick","");
+    $(".player_switch #" + lineIndex).siblings().removeClass('on').attr("onclick","playerSwitch(this.id)");
+    $("#sourceSite").attr("onclick","sourceSiteSwitch()");
+}
+sourceSiteSwitch = function(){
+    $('.player_main iframe').hide().attr('src','http://www.dilidili.wang');
+    $('.player_main .back').show();
+    $(".player_switch #sourceSite").addClass('on').attr("onclick","");
+    $(".player_switch #sourceSite").siblings().removeClass('on').attr("onclick","playerSwitch(this.id)");
+}
+</script>
